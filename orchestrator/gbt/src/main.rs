@@ -25,6 +25,7 @@ mod keys;
 mod orchestrator;
 mod relayer;
 mod utils;
+mod wallet_path_switcher;
 
 #[actix_rt::main]
 async fn main() {
