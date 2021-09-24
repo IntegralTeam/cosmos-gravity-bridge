@@ -7,7 +7,6 @@ use clap::AppSettings;
 use clap::Clap;
 use clarity::Address as EthAddress;
 use clarity::PrivateKey as EthPrivateKey;
-use deep_space::PrivateKey as CosmosPrivateKey;
 use deep_space::{address::Address as CosmosAddress, Coin};
 
 /// Gravity Bridge tools (gbt) provides tools for interacting with the Althea Gravity bridge for Cosmos based blockchains.
@@ -48,8 +47,8 @@ pub enum SubCommand {
 #[clap(setting = AppSettings::ColoredHelp)]
 pub struct OrchestratorOpts {
     /// Cosmos mnemonic phrase containing the tokens you would like to send
-    #[clap(short, long, parse(try_from_str))]
-    pub cosmos_phrase: Option<CosmosPrivateKey>,
+    #[clap(short, long)]
+    pub cosmos_phrase: Option<String>,
     /// An Ethereum private key containing ETH to pay for fees, this will also hold the relayers earnings
     /// in the near future it will be possible to disable the Orchestrators integrated relayer
     #[clap(short, long, parse(try_from_str))]
@@ -108,8 +107,8 @@ pub enum ClientSubcommand {
 #[clap(setting = AppSettings::ColoredHelp)]
 pub struct CosmosToEthOpts {
     /// Cosmos mnemonic phrase containing the tokens you would like to send
-    #[clap(short, long, parse(try_from_str))]
-    pub cosmos_phrase: CosmosPrivateKey,
+    #[clap(short, long)]
+    pub cosmos_phrase: String,
     /// (Optional) The Cosmos gRPC server that will be used to submit the transaction
     #[clap(long, default_value = "http://localhost:9090")]
     pub cosmos_grpc: String,
@@ -206,8 +205,8 @@ pub enum KeysSubcommand {
 #[clap(setting = AppSettings::ColoredHelp)]
 pub struct RegisterOrchestratorAddressOpts {
     /// The Cosmos private key of the validator
-    #[clap(short, long, parse(try_from_str))]
-    pub validator_phrase: CosmosPrivateKey,
+    #[clap(short, long)]
+    pub validator_phrase: String,
     /// (Optional) The Ethereum private key to register, will be generated if not provided
     #[clap(short, long, parse(try_from_str))]
     pub ethereum_key: Option<EthPrivateKey>,
