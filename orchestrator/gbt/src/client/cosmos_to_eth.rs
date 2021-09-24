@@ -1,20 +1,24 @@
+use crate::custom_prefix::CustomPrefix;
 use crate::utils::print_eth;
 use crate::utils::TIMEOUT;
 use crate::{args::CosmosToEthOpts, utils::print_atom};
 use cosmos_gravity::send::{send_request_batch, send_to_eth};
 use deep_space::Coin;
+use deep_space::PrivateKey;
 use gravity_proto::gravity::QueryDenomToErc20Request;
 use gravity_utils::connection_prep::{check_for_fee, create_rpc_connections};
 use std::process::exit;
 
 pub async fn cosmos_to_eth(args: CosmosToEthOpts, address_prefix: String) {
-    let cosmos_key = args.cosmos_phrase;
+    let cosmos_phrase = args.cosmos_phrase;
     let gravity_coin = args.amount;
     let fee = args.fees;
     let cosmos_grpc = args.cosmos_grpc;
     let eth_dest = args.eth_destination;
     let no_batch = args.no_batch;
 
+    let cosmos_key =
+        PrivateKey::from_phrase_with_custom_prefix(&cosmos_phrase, "").unwrap();
     let cosmos_address = cosmos_key.to_address(&address_prefix).unwrap();
 
     let is_cosmos_originated = gravity_coin.denom.starts_with("gravity");

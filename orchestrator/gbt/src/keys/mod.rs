@@ -1,5 +1,6 @@
 pub mod register_orchestrator_address;
 
+use crate::custom_prefix::CustomPrefix;
 use crate::{
     args::{SetEthereumKeyOpts, SetOrchestratorKeyOpts},
     config::{config_exists, load_keys, save_keys},
@@ -15,7 +16,7 @@ pub fn show_keys(home_dir: &Path, prefix: &str) {
     let keys = load_keys(home_dir);
     match keys.orchestrator_phrase {
         Some(v) => {
-            let key = PrivateKey::from_phrase(&v, "")
+            let key = PrivateKey::from_phrase_with_custom_prefix(&v, "")
                 .expect("Failed to decode key in keyfile. Did you edit it manually?");
             let address = key.to_address(prefix).unwrap();
             info!("Your Orchestrator key, {}", address);
@@ -47,7 +48,7 @@ pub fn set_orchestrator_key(home_dir: &Path, opts: SetOrchestratorKeyOpts) {
         error!("Please run `gbt init` before running this command!");
         exit(1);
     }
-    let res = PrivateKey::from_phrase(&opts.phrase, "");
+    let res = PrivateKey::from_phrase_with_custom_prefix(&opts.phrase, "");
     if let Err(e) = res {
         error!("Invalid Cosmos mnemonic phrase {} {:?}", opts.phrase, e);
         exit(1);
