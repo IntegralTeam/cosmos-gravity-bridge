@@ -282,7 +282,7 @@ pub async fn check_delegate_addresses(
                 error!("Your Delegate Orchestrator address is incorrect!");
                 error!(
                     "You provided {}  Correct Value {}",
-                    delegate_eth_address, req_delegate_eth_address
+                    delegate_orchestrator_address, req_delegate_orchestrator_address
                 );
                 error!("In order to resolve this issue you should double check how you input your Orchestrator address phrase, make sure you didn't use your Validator phrase!");
                 exit(1);
