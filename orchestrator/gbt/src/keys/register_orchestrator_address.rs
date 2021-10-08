@@ -6,6 +6,7 @@ use crate::config::config_exists;
 use crate::config::load_keys;
 use crate::config::save_keys;
 use crate::config::KeyStorage;
+use crate::custom_prefix::CustomPrefix;
 use crate::utils::TIMEOUT;
 use clarity::PrivateKey as EthPrivateKey;
 use cosmos_gravity::send::set_gravity_delegate_addresses;
@@ -21,7 +22,7 @@ pub async fn register_orchestrator_address(
 ) {
     let fee = args.fees;
     let cosmos_grpc = args.cosmos_grpc;
-    let validator_key = args.validator_phrase;
+    let validator_phrase = args.validator_phrase;
     let cosmos_phrase = args.cosmos_phrase;
     let mut generated_cosmos = None;
     let mut generated_eth = false;
@@ -35,24 +36,39 @@ pub async fn register_orchestrator_address(
     let contact = connections.contact.unwrap();
     wait_for_cosmos_node_ready(&contact).await;
 
+    let validator_key =
+        CosmosPrivateKey::from_phrase_with_custom_prefix(&validator_phrase, "").unwrap();
     let validator_addr = validator_key.to_address(&contact.get_prefix()).unwrap();
     check_for_fee(&fee, validator_addr, &contact).await;
 
     // Set the cosmos key to either the cli value, the value in the config, or a generated
     // value if the config has not been setup
     let cosmos_key = if let Some(cosmos_phrase) = cosmos_phrase.clone() {
-        CosmosPrivateKey::from_phrase(&cosmos_phrase, "").expect("Failed to parse cosmos key")
+        CosmosPrivateKey::from_phrase_with_custom_prefix(&cosmos_phrase, "")
+            .expect("Failed to parse cosmos key")
     } else {
         let mut key = None;
         if config_exists(&home_dir) {
             let keys = load_keys(&home_dir);
             if let Some(phrase) = keys.orchestrator_phrase {
-                key = Some(CosmosPrivateKey::from_phrase(phrase.as_str(), "").unwrap());
+                key = Some(
+                    CosmosPrivateKey::from_phrase_with_custom_prefix(
+                        phrase.as_str(),
+                        ""
+                    )
+                    .unwrap(),
+                );
             }
         }
         if key.is_none() {
             let new_phrase = Mnemonic::generate(24).unwrap();
-            key = Some(CosmosPrivateKey::from_phrase(new_phrase.as_str(), "").unwrap());
+            key = Some(
+                CosmosPrivateKey::from_phrase_with_custom_prefix(
+                    new_phrase.as_str(),
+                    ""
+                )
+                .unwrap(),
+            );
             generated_cosmos = Some(new_phrase);
         }
         key.unwrap()

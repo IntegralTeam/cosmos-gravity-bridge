@@ -1,6 +1,7 @@
 use crate::args::OrchestratorOpts;
 use crate::config::config_exists;
 use crate::config::load_keys;
+use crate::custom_prefix::CustomPrefix;
 use cosmos_gravity::query::get_gravity_params;
 use deep_space::PrivateKey as CosmosPrivateKey;
 use gravity_utils::connection_prep::{
@@ -25,26 +26,29 @@ pub async fn orchestrator(
     let cosmos_grpc = args.cosmos_grpc;
     let ethereum_rpc = args.ethereum_rpc;
     let ethereum_key = args.ethereum_key;
-    let cosmos_key = args.cosmos_phrase;
+    let cosmos_phrase = args.cosmos_phrase;
 
-    let cosmos_key = if let Some(k) = cosmos_key {
-        k
+    let cosmos_key = if let Some(phrase) = cosmos_phrase {
+        CosmosPrivateKey::from_phrase_with_custom_prefix(&phrase, "").unwrap()
     } else {
-        let mut k = None;
+        let mut key = None;
         if config_exists(home_dir) {
             let keys = load_keys(home_dir);
             if let Some(stored_key) = keys.orchestrator_phrase {
-                k = Some(CosmosPrivateKey::from_phrase(&stored_key, "").unwrap())
+                key = Some(
+                    CosmosPrivateKey::from_phrase_with_custom_prefix(&stored_key, "")
+                        .unwrap(),
+                )
             }
         }
-        if k.is_none() {
+        if key.is_none() {
             error!("You must specify a Cosmos key phrase!");
             error!("To generate, register, and store a key use `gbt keys register-orchestrator-address`");
             error!("Store an already registered key using 'gbt keys set-orchestrator-key`");
             error!("To run from the command line, with no key storage use 'gbt orchestrator --cosmos-phrase your phrase' ");
             exit(1);
         }
-        k.unwrap()
+        key.unwrap()
     };
     let ethereum_key = if let Some(k) = ethereum_key {
         k

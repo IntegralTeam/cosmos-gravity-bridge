@@ -7,6 +7,7 @@ use crate::args::{ClientSubcommand, KeysSubcommand, SubCommand};
 use crate::config::init_config;
 use crate::keys::show_keys;
 use crate::{orchestrator::orchestrator, relayer::relayer};
+use crate::custom_prefix::init_cosmos_key_generation;
 use args::Opts;
 use clap::Clap;
 use client::cosmos_to_eth::cosmos_to_eth;
@@ -21,6 +22,7 @@ use keys::set_orchestrator_key;
 mod args;
 mod client;
 mod config;
+mod custom_prefix;
 mod keys;
 mod orchestrator;
 mod relayer;
@@ -37,6 +39,8 @@ async fn main() {
 
     // handle global config here
     let address_prefix = opts.address_prefix;
+    init_cosmos_key_generation(&address_prefix);
+
     let home_dir = get_home_dir(opts.home);
     let config = load_config(&home_dir);
 
