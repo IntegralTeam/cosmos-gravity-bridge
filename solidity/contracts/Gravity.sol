@@ -551,13 +551,14 @@ contract Gravity is ReentrancyGuard {
 	}
 
 	function deployERC20(
+		address _tokensReceiver,
 		string memory _cosmosDenom,
 		string memory _name,
 		string memory _symbol,
 		uint8 _decimals
 	) public {
 		// Deploy an ERC20 with entire supply granted to Gravity.sol
-		CosmosERC20 erc20 = new CosmosERC20(address(this), _name, _symbol, _decimals);
+		CosmosERC20 erc20 = new CosmosERC20(_tokensReceiver, _name, _symbol, _decimals);
 
 		// Fire an event to let the Cosmos module know
 		state_lastEventNonce = state_lastEventNonce.add(1);
