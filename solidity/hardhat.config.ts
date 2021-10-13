@@ -2,6 +2,10 @@ import "@nomiclabs/hardhat-waffle";
 import "hardhat-gas-reporter";
 import "hardhat-typechain";
 import { task } from "hardhat/config";
+import "@nomiclabs/hardhat-etherscan";
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 task("accounts", "Prints the list of accounts", async (args, hre) => {
   const accounts = await hre.ethers.getSigners();
@@ -824,7 +828,16 @@ module.exports = {
           balance: "0xfffffffffffffffffffffff"
         }
       ]
-    }
+    },
+    rinkeby: {
+      url: process.env.RINKEBY_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
+    // apiKey: process.env.BSCSCAN_API_KEY,
   },
   typechain: {
     outDir: "typechain",
@@ -836,5 +849,5 @@ module.exports = {
   },
   mocha: {
     timeout: 2000000
-  }
+  },
 };

@@ -10,6 +10,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { exit } from "process";
 import { start } from "node:repl";
 import { SSL_OP_EPHEMERAL_RSA } from "node:constants";
+import hre from "hardhat";
 
 const args = commandLineArgs([
   // the ethernum node used to deploy the contract
@@ -227,6 +228,17 @@ async function deploy() {
   )) as Gravity;
 
   await gravity.deployed();
+
+  await hre.run("verify:verify", {
+    address: gravity.address,
+    constructorArguments: [
+      gravityId,
+      vote_power,
+      eth_addresses,
+      powers,
+    ]
+  });
+  
   console.log("Gravity deployed at Address - ", gravity.address);
   await submitGravityAddress(gravity.address);
 }
