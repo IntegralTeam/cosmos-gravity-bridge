@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "./CosmosToken.sol";
+import "./wFUND.sol";
 
 pragma experimental ABIEncoderV2;
 
@@ -555,10 +555,18 @@ contract Gravity is ReentrancyGuard {
 		string memory _cosmosDenom,
 		string memory _name,
 		string memory _symbol,
-		uint8 _decimals
+		uint8 _decimals,
+		uint256 _supply,
+		address _router
 	) public {
 		// Deploy an ERC20 with entire supply granted to Gravity.sol
-		CosmosERC20 erc20 = new CosmosERC20(_tokensReceiver, _name, _symbol, _decimals);
+		wFUND erc20 = new wFUND(
+			_tokensReceiver,
+			_name,
+			_symbol,
+			_decimals,
+			_supply,
+			_router);
 
 		// Fire an event to let the Cosmos module know
 		state_lastEventNonce = state_lastEventNonce.add(1);

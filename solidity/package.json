@@ -6,6 +6,7 @@
   "scripts": {
     "evm": "npx hardhat node",
     "test": "npx hardhat test --network localhost",
+    "test:debug": "node --inspect ./node_modules/.bin/hardhat test",
     "typechain": "npx hardhat typechain",
     "compile-deployer": "npx tsc -p . ; pkg dist/contract-deployer.js --targets node10-linux-x64",
     "evm_fork": "npx hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_ID} --fork-block-number 12782071",
@@ -61,6 +62,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@uniswap/v2-core": "^1.0.0",
     "pkg": "^4.4.9"
   }
 }
