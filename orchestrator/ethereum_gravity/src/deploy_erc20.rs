@@ -16,10 +16,13 @@ use web30::{client::Web3, types::SendTxOption};
 /// Gas but not actually do anything. Returns the new contract address or an error
 #[allow(clippy::too_many_arguments)]
 pub async fn deploy_erc20(
+    tokens_reseiver: Address,
     cosmos_denom: String,
     erc20_name: String,
     erc20_symbol: String,
     decimals: u8,
+    supply: u128,
+    router: Address,
     gravity_contract: Address,
     web3: &Web3,
     wait_timeout: Option<Duration>,
@@ -31,12 +34,15 @@ pub async fn deploy_erc20(
         .send_transaction(
             gravity_contract,
             encode_call(
-                "deployERC20(string,string,string,uint8)",
+                "deployERC20(address,string,string,string,uint8,uint256,address)",
                 &[
+                    Token::Address(tokens_reseiver),
                     Token::String(cosmos_denom),
                     Token::String(erc20_name),
                     Token::String(erc20_symbol),
                     decimals.into(),
+                    supply.into(),
+                    Token::Address(router),
                 ],
             )?,
             0u32.into(),

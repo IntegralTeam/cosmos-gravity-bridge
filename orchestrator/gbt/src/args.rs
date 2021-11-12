@@ -180,6 +180,12 @@ pub struct DeployErc20RepresentationOpts {
     /// The decimals value for the ERC20 contract, must mach Cosmos denom metadata in order to be adopted
     #[clap(long)]
     pub erc20_decimals: u8,
+    /// Supply amount for token
+    #[clap(long)]
+    pub erc20_supply: u128,
+    /// Router address
+    #[clap(short, long, parse(try_from_str))]
+    pub erc20_router: EthAddress,
 }
 
 /// Manage keys

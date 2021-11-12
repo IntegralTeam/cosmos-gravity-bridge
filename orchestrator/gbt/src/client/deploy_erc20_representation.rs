@@ -56,10 +56,13 @@ pub async fn deploy_erc20_representation(
 
     info!("Starting deploy of ERC20");
     let res = deploy_erc20(
+        ethereum_public_key,
         denom.clone(),
         args.erc20_name,
         args.erc20_symbol,
         args.erc20_decimals,
+        args.erc20_supply,
+        args.erc20_router,
         contract_address,
         &web3,
         Some(TIMEOUT),
