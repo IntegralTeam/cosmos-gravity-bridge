@@ -172,7 +172,7 @@ async function deploy() {
 
 
     const arbitrary_logic_path = "/gravity/solidity/artifacts/contracts/TestUniswapLiquidity.sol/TestUniswapLiquidity.json"
-    if (fs.existsSync(arbitrary_logic_path)) { 
+    if (fs.existsSync(arbitrary_logic_path)) {
       const { abi, bytecode } = getContractArtifacts(arbitrary_logic_path);
       const liquidityFactory = new ethers.ContractFactory(abi, bytecode, wallet);
       const testUniswapLiquidity = (await liquidityFactory.deploy(erc20TestAddress)) as TestUniswapLiquidity;
@@ -208,8 +208,16 @@ async function deploy() {
     powers_sum += latestValset.members[i].power;
   }
 
-  // 66% of uint32_max
-  let vote_power = 2834678415;
+    // 66% of uint32_max
+    let vote_power = 2834678415;
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    console.log('gravityIdString:', gravityIdString)
+    console.log('gravityId:', gravityId)
+    console.log('vote_power:', vote_power)
+    console.log('eth_addresses:', eth_addresses)
+    console.log('powers:', powers)
+    console.log('overrides:', overrides)
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
   if (powers_sum < vote_power) {
     console.log("Refusing to deploy! Incorrect power! Please inspect the validator set below")
     console.log("If less than 66% of the current voting power has unset Ethereum Addresses we refuse to deploy")
@@ -217,6 +225,7 @@ async function deploy() {
     exit(1)
   }
 
+    console.log("1!")
   const gravity = (await factory.deploy(
     // todo generate this randomly at deployment time that way we can avoid
     // anything but intentional conflicts
@@ -226,8 +235,10 @@ async function deploy() {
     powers,
     overrides
   )) as Gravity;
+    console.log("2!")
 
   await gravity.deployed();
+    console.log("3!")
 
   await hre.run("verify:verify", {
     address: gravity.address,
@@ -238,7 +249,8 @@ async function deploy() {
       powers,
     ]
   });
-  
+  console.log("4!")
+
   console.log("Gravity deployed at Address - ", gravity.address);
   await submitGravityAddress(gravity.address);
 }
