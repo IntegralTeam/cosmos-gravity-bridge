@@ -12,7 +12,8 @@
     "evm_fork": "npx hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_ID} --fork-block-number 12782071",
     "solidity_test_fork": "npx hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_ID} --fork-block-number 11780000",
     "test_fork": "npx hardhat test --network localhost ./tests_mainnet_fork/*.ts",
-    "verify": "npx hardhat verify --constructor-args arguments.ts --network rinkeby"
+    "verify": "npx hardhat verify --constructor-args arguments.ts --network rinkeby",
+    "verifyToken": "npx hardhat verify --constructor-args argumentsToken.ts --network rinkeby"
   },
   "author": "Jehan Tremback",
   "license": "None",
