@@ -830,14 +830,14 @@ module.exports = {
       ]
     },
     rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_ID}`,
+      url: process.env.RINKEBY_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       chainId: 4,
       gasPrice: 7000000000
     },
     mainnet: {
-      url: `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`,
+      url: process.env.MAINNET_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       chainId: 1,
