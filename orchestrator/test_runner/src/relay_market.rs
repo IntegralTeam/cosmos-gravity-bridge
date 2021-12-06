@@ -22,7 +22,8 @@ use gravity_utils::types::GravityBridgeToolsConfig;
 use rand::Rng;
 use tokio::time::sleep as delay_for;
 use tonic::transport::Channel;
-use web30::amm::{DAI_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS};
+// use web30::amm::{DAI_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS};
+use relayer::amm::{DAI_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS};
 use web30::client::Web3;
 
 pub async fn relay_market_test(

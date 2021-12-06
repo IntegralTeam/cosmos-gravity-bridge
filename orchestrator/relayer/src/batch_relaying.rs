@@ -11,7 +11,8 @@ use gravity_utils::types::{BatchConfirmResponse, RelayerConfig, TransactionBatch
 use std::collections::HashMap;
 use std::time::Duration;
 use tonic::transport::Channel;
-use web30::amm::WETH_CONTRACT_ADDRESS;
+// use web30::amm::WETH_CONTRACT_ADDRESS;
+use crate::amm::WETH_CONTRACT_ADDRESS;
 use web30::client::Web3;
 
 #[derive(Debug, Clone)]

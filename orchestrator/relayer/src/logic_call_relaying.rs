@@ -13,7 +13,8 @@ use gravity_utils::types::{LogicCallConfirmResponse, Valset};
 use std::collections::HashMap;
 use std::time::Duration;
 use tonic::transport::Channel;
-use web30::amm::WETH_CONTRACT_ADDRESS;
+// use web30::amm::WETH_CONTRACT_ADDRESS;
+use crate::amm::WETH_CONTRACT_ADDRESS;
 use web30::client::Web3;
 
 // Determines whether or not submitting `logic_call` will be profitable given the estimated `cost`
